@@ -1,0 +1,180 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "mcp": {
+    "openaiDeveloperDocs": {
+      "type": "remote",
+      "url": "https://developers.openai.com/mcp",
+      "enabled": true
+    }
+  },
+    "formatter": false,
+    "provider": {
+        "openai": {
+            "api": "https://api.openai.com/v1",
+            "models": {
+                "GPT-5.2 codex": {
+                    "name": "GPT-5.2 codex",
+                    "options": {
+                        "apiKey": "code-aionu"
+                    }
+                }
+            }
+        },
+        "AI:ON-U (local)": {
+            "api": "http://localhost:5001/v1",
+            "options": {
+                "apiKey": "code-aionu"
+            },
+            "models": {
+                "[KTDS] Code Assistant v1.1": {
+                    "name": "[KTDS] Code Assistant v1.1",
+                    "options": {
+                        "apiKey": "code-aionu"
+                    }
+                },
+                "Claude 4.6 Opus": {
+                    "name": "Claude 4.6 Opus",
+                    "options": {
+                        "apiKey": "code-aionu"
+                    }
+                },
+                "Claude 4.5 Opus": {
+                    "name": "Claude 4.5 Opus",
+                    "options": {
+                        "apiKey": "code-aionu",
+                        "reasoningEffort": "high"
+                    }
+                },
+                "Claude 4.5 Sonnet": {
+                    "name": "Claude 4.5 Sonnet",
+                    "options": {
+                        "apiKey": "code-aionu"
+                    }
+                },
+                "Gemini 3 Flash Preview": {
+                    "name": "Gemini 3 Flash Preview",
+                    "options": {
+                        "apiKey": "code-aionu"
+                    }
+                },
+                "Gemini 2.5 Flash": {
+                    "name": "Gemini 2.5 Flash",
+                    "options": {
+                        "apiKey": "code-aionu"
+                    }
+                },
+                "GPT-5.2": {
+                    "name": "GPT-5.2",
+                    "options": {
+                        "apiKey": "code-aionu"
+                    }
+                },
+                "GPT-5.1 codex": {
+                    "name": "GPT-5.1 codex",
+                    "provider": { "npm": "@ai-sdk/openai"},
+                    "options": {
+                        "apiKey": "code-aionu"
+                    }
+                }
+
+            }
+        },
+        "AI:ON-U (dev)": {
+            "api": "https://api.aiplatform-support.com/v1",
+            "models": {
+                "[KTDS] Code Assistant v1.1": {
+                    "name": "[KTDS] Code Assistant v1.1",
+                    "options": {
+                        "apiKey": "code-PTGtADJA9FdAyCSmZFBckmvQ"
+                    }
+                },
+                "Claude 4.6 Opus": {
+                    "name": "Claude 4.6 Opus",
+                    "options": {
+                        "apiKey": "code-PTGtADJA9FdAyCSmZFBckmvQ"
+                    }
+                },
+                "Claude 4.5 Opus": {
+                    "name": "Claude 4.5 Opus",
+                    "options": {
+                        "apiKey": "code-PTGtADJA9FdAyCSmZFBckmvQ"
+                    }
+                },
+                "Claude 4.5 Sonnet": {
+                    "name": "Claude 4.5 Sonnet",
+                    "options": {
+                        "apiKey": "code-PTGtADJA9FdAyCSmZFBckmvQ"
+                    }
+                },
+                "Gemini 3 Flash Preview": {
+                    "name": "Gemini 3 Flash Preview",
+                    "options": {
+                        "apiKey": "code-PTGtADJA9FdAyCSmZFBckmvQ"
+                        ,"streaming": true
+                    }
+                },
+                "Gemini 2.5 Flash": {
+                    "name": "Gemini 2.5 Flash",
+                    "options": {
+                        "apiKey": "code-PTGtADJA9FdAyCSmZFBckmvQ"
+                    }
+                },
+                "GPT-5.2": {
+                    "name": "GPT-5.2",
+                    "options": {
+                        "apiKey": "code-PTGtADJA9FdAyCSmZFBckmvQ"
+                    }
+                }
+            }
+        },
+        "AI:ON-U (prd)": {
+            "api": "https://api.abclab.ktds.com/v1",
+            "models": {
+                "[KTDS] Code Assistant v1.1": {
+                    "name": "[KTDS] Code Assistant v1.1",
+                    "options": {
+                        "apiKey": "code-mA2K4wmomkOZed8Nk41ocy5s"
+                    }
+                },
+                "Claude 4.6 Opus": {
+                    "name": "Claude 4.6 Opus",
+                    "options": {
+                        "apiKey": "code-mA2K4wmomkOZed8Nk41ocy5s"
+                    }
+                },
+                "Claude 4.5 Opus": {
+                    "name": "Claude 4.5 Opus",
+                    "options": {
+                        "apiKey": "code-mA2K4wmomkOZed8Nk41ocy5s",
+                        "reasoningEffort": "high"
+                        
+                    }
+                },
+                "Claude 4.5 Sonnet": {
+                    "name": "Claude 4.5 Sonnet",
+                    "options": {
+                        "apiKey": "code-mA2K4wmomkOZed8Nk41ocy5s"
+                    }
+                },
+                "Gemini 3 Flash Preview": {
+                    "name": "Gemini 3 Flash Preview",
+                    "options": {
+                        "apiKey": "code-mA2K4wmomkOZed8Nk41ocy5s"
+                    }
+                },
+                "Gemini 2.5 Flash": {
+                    "name": "Gemini 2.5 Flash",
+                    "options": {
+                        "apiKey": "code-mA2K4wmomkOZed8Nk41ocy5s"
+                    }
+                },
+                "GPT-5.2": {
+                    "name": "GPT-5.2",
+                    "options": {
+                        "apiKey": "code-mA2K4wmomkOZed8Nk41ocy5s"
+                    }
+                }
+            }
+        }
+  }
+}
