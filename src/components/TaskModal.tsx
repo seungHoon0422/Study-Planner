@@ -21,7 +21,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ date, onClose, onShowToast, editT
   const [selectedType, setSelectedType] = useState(editTask?.type || defaultTaskType);
   const [newTypeName, setNewTypeName] = useState('');
   const [isAddingType, setIsAddingType] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirm, setShowConfirm] = useState<{ active: boolean; message: string; payload: any } | null>(null);
 
   const pastelColors = [
