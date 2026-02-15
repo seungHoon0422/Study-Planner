@@ -3,10 +3,11 @@ import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
 export default defineConfig({
+  base: '/Study-Planner/',
   plugins: [react()],
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src/renderer'),
+      '@': resolve(__dirname, 'src'),
     },
   },
 })
