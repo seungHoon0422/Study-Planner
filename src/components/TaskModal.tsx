@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
 import { X, ChevronRight, Trash2, AlertCircle } from 'lucide-react';
 import { usePlannerStore } from '../store/usePlannerStore';
 import type { Task } from '../store/usePlannerStore';
