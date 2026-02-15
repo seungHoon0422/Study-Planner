@@ -8,7 +8,9 @@ import {
   addMonths, 
   subMonths,
   getDay,
-  addDays
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek
 } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { 
@@ -52,8 +54,16 @@ function App() {
   };
 
   const monthStart = startOfMonth(currentMonth);
+  const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
-  const calendarDays = Array.from({ length: 42 }).map((_, i) => addDays(startDate, i));
+  const endDate = endOfWeek(monthEnd);
+  
+  const calendarDays = eachDayOfInterval({
+    start: startDate,
+    end: endDate,
+  });
+
+  const rowCount = Math.ceil(calendarDays.length / 7);
 
   const nextMonth = () => {
     if (isScrolling) return;
@@ -239,8 +249,9 @@ function App() {
             <div className="flex-1 min-h-0 relative px-1 pb-1">
               <div 
                 key={currentMonth.toISOString()}
-                className="grid grid-cols-7 grid-rows-6 gap-2 h-full transition-all duration-500 ease-out transform"
+                className="grid grid-cols-7 gap-2 h-full transition-all duration-500 ease-out transform"
                 style={{
+                  gridTemplateRows: `repeat(${rowCount}, 1fr)`,
                   animation: direction === 'up' ? 'slide-in-from-bottom 0.5s ease-out' : direction === 'down' ? 'slide-in-from-top 0.5s ease-out' : 'none'
                 }}
               >
@@ -263,22 +274,21 @@ function App() {
                         hover:scale-[1.03] hover:shadow-pink-200/50 hover:shadow-2xl hover:border-[#FFD1DC] hover:z-20
                       `}
                     >
-                  <div className="flex justify-between items-start mb-1 shrink-0">
-                    <span className={`text-xs font-black w-6 h-6 flex items-center justify-center rounded-full transition-colors
-                      ${isSameDay(day, new Date()) ? 'bg-[#FF9EAA] text-white shadow-md shadow-pink-100' : 
-                        dayOfWeek === 0 ? 'text-[#FF8E9E]' : 
-                        dayOfWeek === 6 ? 'text-[#A0C4FF]' : 'text-gray-400 group-hover:text-[#FF9EAA]'}
-                    `}>
-                      {format(day, 'd')}
-                    </span>
-                    <button
-                      onClick={(e) => handleAddTaskClick(e, day)}
-                      className="opacity-0 group-hover:opacity-100 p-1 bg-[#FFF0F3] text-[#FF9EAA] rounded-lg hover:bg-[#FFB6C1] hover:text-white transition-all transform active:scale-90"
-                    >
-                      <Plus size={12} strokeWidth={3} />
-                    </button>
-                  </div>
-
+                      <div className="flex justify-between items-start mb-1 shrink-0">
+                        <span className={`text-xs font-black w-6 h-6 flex items-center justify-center rounded-full transition-colors
+                          ${isSameDay(day, new Date()) ? 'bg-[#FF9EAA] text-white shadow-md shadow-pink-100' : 
+                            dayOfWeek === 0 ? 'text-[#FF8E9E]' : 
+                            dayOfWeek === 6 ? 'text-[#A0C4FF]' : 'text-gray-400 group-hover:text-[#FF9EAA]'}
+                        `}>
+                          {format(day, 'd')}
+                        </span>
+                        <button
+                          onClick={(e) => handleAddTaskClick(e, day)}
+                          className="opacity-0 group-hover:opacity-100 p-1 bg-[#FFF0F3] text-[#FF9EAA] rounded-lg hover:bg-[#FFB6C1] hover:text-white transition-all transform active:scale-90"
+                        >
+                          <Plus size={12} strokeWidth={3} />
+                        </button>
+                      </div>
                       
                       <div className="flex-1 flex flex-col justify-start space-y-0.5 overflow-hidden min-h-0 pt-0.5">
                         {dayTasks.slice(0, 6).map(task => (
