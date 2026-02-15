@@ -263,41 +263,42 @@ function App() {
                         hover:scale-[1.03] hover:shadow-pink-200/50 hover:shadow-2xl hover:border-[#FFD1DC] hover:z-20
                       `}
                     >
-                      <div className="flex justify-between items-start mb-2 shrink-0">
-                        <span className={`text-sm font-black w-7 h-7 flex items-center justify-center rounded-full transition-colors
-                          ${isSameDay(day, new Date()) ? 'bg-[#FF9EAA] text-white shadow-md shadow-pink-100' : 
-                            dayOfWeek === 0 ? 'text-[#FF8E9E]' : 
-                            dayOfWeek === 6 ? 'text-[#A0C4FF]' : 'text-gray-400 group-hover:text-[#FF9EAA]'}
-                        `}>
-                          {format(day, 'd')}
-                        </span>
-                        <button
-                          onClick={(e) => handleAddTaskClick(e, day)}
-                          className="opacity-0 group-hover:opacity-100 p-1.5 bg-[#FFF0F3] text-[#FF9EAA] rounded-xl hover:bg-[#FFB6C1] hover:text-white transition-all transform active:scale-90"
-                        >
-                          <Plus size={14} strokeWidth={3} />
-                        </button>
-                      </div>
+                  <div className="flex justify-between items-start mb-1 shrink-0">
+                    <span className={`text-xs font-black w-6 h-6 flex items-center justify-center rounded-full transition-colors
+                      ${isSameDay(day, new Date()) ? 'bg-[#FF9EAA] text-white shadow-md shadow-pink-100' : 
+                        dayOfWeek === 0 ? 'text-[#FF8E9E]' : 
+                        dayOfWeek === 6 ? 'text-[#A0C4FF]' : 'text-gray-400 group-hover:text-[#FF9EAA]'}
+                    `}>
+                      {format(day, 'd')}
+                    </span>
+                    <button
+                      onClick={(e) => handleAddTaskClick(e, day)}
+                      className="opacity-0 group-hover:opacity-100 p-1 bg-[#FFF0F3] text-[#FF9EAA] rounded-lg hover:bg-[#FFB6C1] hover:text-white transition-all transform active:scale-90"
+                    >
+                      <Plus size={12} strokeWidth={3} />
+                    </button>
+                  </div>
+
                       
-                      <div className="flex-1 flex flex-col justify-start space-y-1 overflow-hidden min-h-0 pt-1">
-                        {dayTasks.slice(0, 5).map(task => (
+                      <div className="flex-1 flex flex-col justify-start space-y-0.5 overflow-hidden min-h-0 pt-0.5">
+                        {dayTasks.slice(0, 6).map(task => (
                           <div 
                             key={task.id} 
-                            className={`text-[10px] md:text-xs truncate px-2.5 py-1.5 rounded-xl font-bold border border-black/5 shadow-sm transition-all
+                            className={`text-[9px] md:text-[10px] truncate px-1.5 py-0.5 rounded-lg font-bold border border-black/5 shadow-sm transition-all
                               ${task.isCompleted ? 'opacity-100' : 'opacity-100 hover:translate-x-1'}`}
                             style={{ 
                               backgroundColor: task.color || '#FDF2F4', 
                               color: '#374151' 
                             }}
                           >
-                            <span className={task.isCompleted ? 'line-through decoration-black/30 decoration-2' : ''}>
-                              {task.startTime} {task.title}
+                            <span className={task.isCompleted ? 'line-through decoration-black/30 decoration-1' : ''}>
+                              {task.title.replace(/\[.*?\]\s*/, '')} <span className="opacity-50 text-[8px] font-medium">[{task.type}]</span> <span className="opacity-40 text-[8px]">{task.startTime}</span>
                             </span>
                           </div>
                         ))}
-                        {dayTasks.length > 5 && (
-                          <div className="text-[10px] text-[#FFB6C1] font-black pl-2 animate-pulse">
-                            + {dayTasks.length - 5} items
+                        {dayTasks.length > 6 && (
+                          <div className="text-[8px] text-[#FFB6C1] font-black pl-1">
+                            + {dayTasks.length - 6} items
                           </div>
                         )}
                       </div>
