@@ -80,6 +80,7 @@ const MonthlyFeedback: React.FC<MonthlyFeedbackProps> = ({ currentMonth, onClose
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 bg-[#FFFBFC] no-scrollbar">
+          {/* Main Stats Card */}
           <div className="grid grid-cols-3 gap-4">
             <div className="bg-white p-5 rounded-[2rem] shadow-sm border-2 border-[#FFF0F3] flex flex-col items-center group hover:border-[#FFD1DC] transition-all">
               <div className="text-[#FFB6C1] mb-2 group-hover:scale-110 transition-transform"><BarChart3 size={24} /></div>
@@ -98,6 +99,7 @@ const MonthlyFeedback: React.FC<MonthlyFeedbackProps> = ({ currentMonth, onClose
             </div>
           </div>
 
+          {/* Category Distribution */}
           <section className="space-y-4">
             <h3 className="text-xl font-black text-gray-800 flex items-center gap-2">
               <div className="w-1.5 h-6 bg-[#FFD1DC] rounded-full" />
@@ -120,9 +122,10 @@ const MonthlyFeedback: React.FC<MonthlyFeedbackProps> = ({ currentMonth, onClose
             </div>
           </section>
 
+          {/* Personal Retrospective */}
           <section className="space-y-4">
             <div className="flex justify-between items-center px-2">
-              <h3 className="text-xl font-black text-gray-800 flex items-center gap-2">
+              <h3 className="text-xl font-black text-gray-800 flex items-center gap-3">
                 <div className="w-1.5 h-6 bg-[#FFD1DC] rounded-full" />
                 Personal Note
               </h3>
@@ -156,9 +159,10 @@ const MonthlyFeedback: React.FC<MonthlyFeedbackProps> = ({ currentMonth, onClose
             </div>
           </section>
 
+          {/* AI Advisor Card */}
           <section className="space-y-4 pb-4">
             <div className="flex items-center justify-between px-2">
-              <h3 className="text-xl font-black text-gray-800 flex items-center gap-2">
+              <h3 className="text-xl font-black text-gray-800 flex items-center gap-3">
                 <div className="w-1.5 h-6 bg-[#FF9EAA] rounded-full" />
                 AI Advisor
               </h3>

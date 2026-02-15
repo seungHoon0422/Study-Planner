@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { X, ChevronRight, Trash2, AlertCircle } from 'lucide-react';
 import { usePlannerStore } from '../store/usePlannerStore';
 import type { Task } from '../store/usePlannerStore';
@@ -36,7 +37,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ date, onClose, onShowToast, editT
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting) return;
 
     const taskPayload = {
       title: title.startsWith('[') ? title : `[${selectedType}] ${title}`,
@@ -49,8 +49,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ date, onClose, onShowToast, editT
     };
 
     const result = editTask 
-      ? updateTask({ ...taskPayload, id: editTask.id, isCompleted: editTask.isCompleted })
-      : addTask(taskPayload) as any;
+      ? (updateTask({ ...taskPayload, id: editTask.id, isCompleted: editTask.isCompleted }) as any)
+      : (addTask(taskPayload) as any);
 
     if (!result.success) {
       if (result.conflict) {
@@ -296,7 +296,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ date, onClose, onShowToast, editT
         </form>
       </div>
 
-      {/* 커스텀 컨펌 모달 */}
       {showConfirm?.active && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in">
           <div className="bg-white rounded-[2.5rem] shadow-2xl p-8 max-w-sm w-full border-4 border-[#FFD1DC] text-center space-y-6">
