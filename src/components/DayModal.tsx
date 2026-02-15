@@ -110,11 +110,6 @@ const DayModal: React.FC<DayModalProps> = ({ date, onClose, onShowToast }) => {
                         <div className={`font-extrabold text-gray-800 text-base truncate ${task.isCompleted ? 'line-through opacity-50' : ''}`}>
                           {task.title}
                         </div>
-                        {task.description && (
-                          <div className="text-[11px] text-gray-500 truncate mt-0.5 font-medium">
-                            {task.description}
-                          </div>
-                        )}
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         <button 

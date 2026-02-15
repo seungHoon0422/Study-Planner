@@ -13,7 +13,7 @@ import {
 import { ko } from 'date-fns/locale';
 import { 
   ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, 
-  Sparkles, StickyNote, Target, BarChart3, Quote, CheckCircle2, Edit3, Save
+  Sparkles, StickyNote, Target, BarChart3, Quote, CheckCircle2, Edit3, Save, X
 } from 'lucide-react';
 import { usePlannerStore } from './store/usePlannerStore';
 import DayModal from './components/DayModal';
@@ -28,6 +28,7 @@ function App() {
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isDayModalOpen, setIsDayModalOpen] = useState(false);
   const [isMonthlyFeedbackOpen, setIsMonthlyFeedbackOpen] = useState(false);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   
@@ -37,7 +38,6 @@ function App() {
   const [keywordInput, setKeywordInput] = useState(currentMonthly.keyword);
   const [isEditingKeyword, setIsEditingKeyword] = useState(false);
   const [memoInput, setMemoInput] = useState(currentMonthly.memo);
-
   const [isEditingMemo, setIsEditingMemo] = useState(false);
 
   useEffect(() => {
@@ -69,14 +69,17 @@ function App() {
 
   const handleWheel = (e: React.WheelEvent) => {
     if (isScrolling || isTaskModalOpen || isDayModalOpen || isMonthlyFeedbackOpen) return;
-    if (e.deltaY > 10) {
+    
+    if (Math.abs(e.deltaY) < 15) return;
+
+    if (e.deltaY > 0) {
       setIsScrolling(true);
       nextMonth();
-      setTimeout(() => setIsScrolling(false), 400);
-    } else if (e.deltaY < -10) {
+      setTimeout(() => setIsScrolling(false), 800);
+    } else {
       setIsScrolling(true);
       prevMonth();
-      setTimeout(() => setIsScrolling(false), 400);
+      setTimeout(() => setIsScrolling(false), 800);
     }
   };
 
@@ -109,8 +112,8 @@ function App() {
       style={{ fontFamily: "'Pretendard', -apple-system, system-ui, sans-serif" }}
       onWheel={handleWheel}
     >
-      <div className="max-w-[1800px] mx-auto w-full flex flex-1 min-h-0 gap-4">
-        <div className="flex-1 flex flex-col min-h-0 space-y-3">
+      <div className="max-w-[1800px] mx-auto w-full flex flex-1 min-h-0 gap-0 relative">
+        <div className="flex-1 flex flex-col min-h-0 space-y-3 transition-all duration-500">
           <div className="flex items-center justify-between bg-white/70 backdrop-blur-xl p-4 rounded-[2rem] shadow-sm border border-white/50 shrink-0">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
@@ -127,29 +130,26 @@ function App() {
 
               <div className="relative group">
                 {isEditingKeyword ? (
-                  <div className="flex items-center gap-2 ml-4">
-                    <input
-                      type="text"
-                      value={keywordInput}
-                      onChange={(e) => setKeywordInput(e.target.value)}
-                      onBlur={handleKeywordSubmit}
-                      onKeyDown={(e) => e.key === 'Enter' && handleKeywordSubmit()}
-                      className="text-sm px-4 py-2 bg-white border-2 border-[#FF9EAA] rounded-full outline-none text-[#FF8E9E] font-black w-64 animate-in zoom-in-95 placeholder:text-gray-200 shadow-lg shadow-pink-100/50"
-                      placeholder="이번 달의 한줄 목표"
-                      autoFocus
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    value={keywordInput}
+                    onChange={(e) => setKeywordInput(e.target.value)}
+                    onBlur={handleKeywordSubmit}
+                    onKeyDown={(e) => e.key === 'Enter' && handleKeywordSubmit()}
+                    className="text-sm px-4 py-2 bg-white border-2 border-[#FF9EAA] rounded-full outline-none text-[#FF8E9E] font-black w-64 animate-in zoom-in-95 placeholder:text-gray-200 shadow-lg shadow-pink-100/50"
+                    placeholder="이번 달의 한줄 목표"
+                    autoFocus
+                  />
                 ) : (
                   <button 
                     onClick={() => setIsEditingKeyword(true)}
-                    className="ml-4 flex items-center gap-2 text-sm bg-gradient-to-r from-[#FFB6C1] to-[#FF9EAA] px-5 py-2 rounded-full text-white font-black hover:shadow-lg hover:shadow-pink-200 transition-all border border-white/50 group"
+                    className="flex items-center gap-2 text-sm bg-gradient-to-r from-[#FFB6C1] to-[#FF9EAA] px-5 py-2 rounded-full text-white font-black hover:shadow-lg hover:shadow-pink-200 transition-all border border-white/50 group"
                   >
                     <Quote size={14} className="fill-white/30" />
                     <span className="max-w-[200px] truncate drop-shadow-sm">{currentMonthly.keyword || '한줄 키워드 설정'}</span>
                     <Sparkles size={12} className="animate-pulse opacity-50" />
                   </button>
                 )}
-
               </div>
             </div>
             
@@ -161,6 +161,17 @@ function App() {
                 <BarChart3 size={18} className="group-hover:scale-110 transition-transform" />
                 월간 리포트
               </button>
+              
+              <button 
+                onClick={() => setIsSideBarOpen(!isSideBarOpen)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl transition-all font-black shadow-sm active:scale-95 border-2 ${
+                  isSideBarOpen ? 'bg-[#FF9EAA] border-[#FF9EAA] text-white' : 'bg-white border-[#FFD1DC] text-[#FF9EAA]'
+                }`}
+              >
+                <StickyNote size={18} />
+                메모
+              </button>
+
               <div className="flex items-center bg-white border-2 border-[#FFD1DC] rounded-2xl overflow-hidden shadow-sm">
                 <button onClick={prevMonth} className="p-2.5 hover:bg-[#FFF5F7] transition-colors text-[#FF9EAA]">
                   <ChevronLeft size={20} strokeWidth={3} />
@@ -227,19 +238,19 @@ function App() {
                       
                       <div className="flex-1 flex flex-col justify-start space-y-1 overflow-hidden min-h-0 pt-1">
                         {dayTasks.slice(0, 5).map(task => (
-                        <div 
-                          key={task.id} 
-                          className={`text-[10px] md:text-xs truncate px-2.5 py-1.5 rounded-xl font-bold border border-black/5 shadow-sm transition-all
-                            ${task.isCompleted ? 'opacity-100' : 'opacity-100 hover:translate-x-1'}`}
-                          style={{ 
-                            backgroundColor: task.color || '#FDF2F4', 
-                            color: '#374151' 
-                          }}
-                        >
-                          <span className={task.isCompleted ? 'line-through decoration-black/30 decoration-2' : ''}>
-                            {task.startTime} {task.title}
-                          </span>
-                        </div>
+                          <div 
+                            key={task.id} 
+                            className={`text-[10px] md:text-xs truncate px-2.5 py-1.5 rounded-xl font-bold border border-black/5 shadow-sm transition-all
+                              ${task.isCompleted ? 'opacity-100' : 'opacity-100 hover:translate-x-1'}`}
+                            style={{ 
+                              backgroundColor: task.color || '#FDF2F4', 
+                              color: '#374151' 
+                            }}
+                          >
+                            <span className={task.isCompleted ? 'line-through decoration-black/30 decoration-2' : ''}>
+                              {task.startTime} {task.title}
+                            </span>
+                          </div>
                         ))}
                         {dayTasks.length > 5 && (
                           <div className="text-[10px] text-[#FFB6C1] font-black pl-2 animate-pulse">
@@ -261,19 +272,31 @@ function App() {
           </div>
         </div>
 
-        <div className="w-80 shrink-0 flex flex-col space-y-4 animate-in slide-in-from-right duration-700">
-          <div className="bg-white/80 backdrop-blur-md p-6 rounded-[2.5rem] shadow-2xl border border-white/50 flex-1 flex flex-col group transition-all hover:shadow-pink-100">
+        <div 
+          className={`absolute top-0 right-0 h-full w-80 z-50 transition-all duration-500 ease-in-out transform ${
+            isSideBarOpen ? 'translate-x-0' : 'translate-x-full pointer-events-none opacity-0'
+          }`}
+        >
+          <div className="bg-white/90 backdrop-blur-md p-6 rounded-l-[2.5rem] shadow-2xl border-l border-white/50 h-full flex flex-col group">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-2xl font-black text-[#FF9EAA] flex items-center gap-3">
                 <div className="p-2 bg-[#FFF0F3] rounded-xl"><StickyNote size={20} className="text-[#FFB6C1]" /></div>
                 Month Note
               </h2>
-              <button 
-                onClick={isEditingMemo ? handleMemoSave : () => setIsEditingMemo(true)}
-                className="p-2 bg-[#FFF0F3] text-[#FFB6C1] rounded-xl hover:bg-[#FF9EAA] hover:text-white transition-all shadow-sm active:scale-90"
-              >
-                {isEditingMemo ? <Save size={18} /> : <Edit3 size={18} />}
-              </button>
+              <div className="flex gap-2">
+                <button 
+                  onClick={isEditingMemo ? handleMemoSave : () => setIsEditingMemo(true)}
+                  className="p-2 bg-[#FFF0F3] text-[#FFB6C1] rounded-xl hover:bg-[#FF9EAA] hover:text-white transition-all shadow-sm active:scale-90"
+                >
+                  {isEditingMemo ? <Save size={18} /> : <Edit3 size={18} />}
+                </button>
+                <button 
+                  onClick={() => setIsSideBarOpen(false)}
+                  className="p-2 bg-gray-50 text-gray-400 rounded-xl hover:bg-gray-100 transition-all"
+                >
+                  <X size={18} />
+                </button>
+              </div>
             </div>
             
             <div className="flex-1 flex flex-col relative">
@@ -291,7 +314,7 @@ function App() {
                   className="flex-1 w-full p-6 bg-[#FFFBFC] border-2 border-[#FFF0F3] rounded-[2rem] text-sm leading-relaxed text-gray-600 font-bold cursor-pointer hover:border-[#FFD1DC] transition-all relative overflow-hidden group/memo"
                 >
                   <div className="absolute top-4 right-4 text-[#FFD1DC] opacity-20"><Quote size={32} /></div>
-                  <p className="whitespace-pre-wrap">
+                  <p className="whitespace-pre-wrap text-sm">
                     {currentMonthly.memo || '이번 달의 다짐을 남겨보세요.'}
                   </p>
                   <div className="absolute inset-0 bg-[#FF9EAA]/5 opacity-0 group-hover/memo:opacity-100 transition-opacity flex items-center justify-center">
