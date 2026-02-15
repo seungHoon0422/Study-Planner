@@ -13,7 +13,8 @@ import {
 import { ko } from 'date-fns/locale';
 import { 
   ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon, 
-  Sparkles, StickyNote, Target, BarChart3, Quote, CheckCircle2, Edit3, Save, X
+  Sparkles, StickyNote, Target, BarChart3, Quote, CheckCircle2, Edit3, Save, X,
+  Download, Upload
 } from 'lucide-react';
 import { usePlannerStore } from './store/usePlannerStore';
 import DayModal from './components/DayModal';
@@ -104,6 +105,48 @@ function App() {
     updateMonthlyData(yearMonth, { memo: memoInput });
     setIsEditingMemo(false);
     showToast('메모가 저장되었습니다!');
+  };
+
+  const exportData = () => {
+    const data = {
+      tasks: localStorage.getItem('study_planner_tasks'),
+      feedbacks: localStorage.getItem('study_planner_feedbacks'),
+      types: localStorage.getItem('study_planner_types'),
+      defaultType: localStorage.getItem('study_planner_default_type'),
+      monthly: localStorage.getItem('study_planner_monthly'),
+    };
+    
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `study-planner-backup-${format(new Date(), 'yyyyMMdd')}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast('데이터 백업 파일이 다운로드되었습니다.');
+  };
+
+  const importData = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const data = JSON.parse(event.target?.result as string);
+        if (data.tasks) localStorage.setItem('study_planner_tasks', data.tasks);
+        if (data.feedbacks) localStorage.setItem('study_planner_feedbacks', data.feedbacks);
+        if (data.types) localStorage.setItem('study_planner_types', data.types);
+        if (data.defaultType) localStorage.setItem('study_planner_default_type', data.defaultType);
+        if (data.monthly) localStorage.setItem('study_planner_monthly', data.monthly);
+        
+        showToast('데이터 복구가 완료되었습니다! 페이지를 새로고침합니다.');
+        setTimeout(() => window.location.reload(), 1500);
+      } catch (err) {
+        showToast('올바르지 않은 백업 파일입니다.', 'error');
+      }
+    };
+    reader.readAsText(file);
   };
 
   return (
@@ -326,6 +369,25 @@ function App() {
 
             <div className="mt-6 space-y-4">
               <div className="h-[2px] bg-[#FFF0F3] w-full rounded-full" />
+              
+              <div className="space-y-2">
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Data Management</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <button 
+                    onClick={exportData}
+                    className="flex items-center justify-center gap-2 py-3 bg-white border border-[#FFD1DC] rounded-xl text-[#FF9EAA] font-bold text-xs hover:bg-[#FFF0F3] transition-all"
+                  >
+                    <Download size={14} />
+                    백업
+                  </button>
+                  <label className="flex items-center justify-center gap-2 py-3 bg-white border border-[#FFD1DC] rounded-xl text-[#FF9EAA] font-bold text-xs hover:bg-[#FFF0F3] transition-all cursor-pointer">
+                    <Upload size={14} />
+                    복구
+                    <input type="file" accept=".json" onChange={importData} className="hidden" />
+                  </label>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 gap-3">
                 <div className="bg-white/50 p-4 rounded-2xl border border-[#FFF0F3] flex items-center justify-between transition-all hover:bg-white hover:shadow-sm group">
                   <div className="flex items-center gap-3">
