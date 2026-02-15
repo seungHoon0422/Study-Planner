@@ -24,6 +24,10 @@ import TaskModal from './components/TaskModal';
 import MonthlyFeedback from './components/MonthlyFeedback';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true');
+  const [loginId, setLoginId] = useState('');
+  const [loginPw, setLoginPw] = useState('');
+  
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const yearMonth = format(currentMonth, 'yyyy-MM');
   const [direction, setDirection] = useState<'up' | 'down' | null>(null);
@@ -51,6 +55,23 @@ function App() {
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
+  };
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (loginId === 'pjh104404' && loginPw === 'didwkfl326') {
+      setIsLoggedIn(true);
+      localStorage.setItem('isLoggedIn', 'true');
+      showToast('로그인 성공! 환영합니다.');
+    } else {
+      showToast('아이디 또는 비밀번호가 일치하지 않습니다.', 'error');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('isLoggedIn');
+    showToast('로그아웃 되었습니다.');
   };
 
   const monthStart = startOfMonth(currentMonth);
@@ -159,6 +180,54 @@ function App() {
     reader.readAsText(file);
   };
 
+  if (!isLoggedIn) {
+    return (
+      <div className="fixed inset-0 bg-[#FFF5F7] flex items-center justify-center font-sans p-4">
+        <div className="bg-white/80 backdrop-blur-xl p-10 rounded-[3rem] shadow-2xl border-4 border-white max-w-md w-full animate-in zoom-in-95 duration-500 text-center">
+          <div className="inline-flex p-4 bg-[#FFB6C1] rounded-[2rem] text-white shadow-xl shadow-pink-100 mb-6">
+            <CalendarIcon size={48} strokeWidth={2.5} />
+          </div>
+          <h1 className="text-4xl font-black text-[#FF9EAA] tracking-tighter mb-2">Study Planner</h1>
+          <p className="text-gray-400 font-bold text-sm mb-10">나만의 소중한 학습 시간을 관리해보세요</p>
+          
+          <form onSubmit={handleLogin} className="space-y-4">
+            <input
+              type="text"
+              placeholder="아이디"
+              value={loginId}
+              onChange={(e) => setLoginId(e.target.value)}
+              className="w-full px-6 py-4 bg-[#FFFBFC] border-2 border-[#FFF0F3] rounded-[1.5rem] focus:border-[#FFB6C1] outline-none text-[#FF9EAA] font-bold transition-all placeholder:text-gray-300"
+            />
+            <input
+              type="password"
+              placeholder="비밀번호"
+              value={loginPw}
+              onChange={(e) => setLoginPw(e.target.value)}
+              className="w-full px-6 py-4 bg-[#FFFBFC] border-2 border-[#FFF0F3] rounded-[1.5rem] focus:border-[#FFB6C1] outline-none text-[#FF9EAA] font-bold transition-all placeholder:text-gray-300"
+            />
+            <button
+              type="submit"
+              className="w-full bg-[#FF9EAA] hover:bg-[#FF8E9E] text-white font-black py-5 rounded-[2rem] shadow-xl shadow-pink-100 transition-all transform active:scale-95 text-lg mt-4"
+            >
+              로그인하기
+            </button>
+          </form>
+          
+          <div className="mt-8 text-[10px] text-gray-300 font-bold uppercase tracking-widest">
+            © 2026 Study Planner Powered by AI
+          </div>
+        </div>
+        {toast && (
+          <div className={`fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] px-8 py-4 rounded-[2rem] shadow-2xl backdrop-blur-xl border-2 border-white/50 flex items-center gap-4 transition-all animate-in slide-in-from-bottom-5
+            ${toast.type === 'success' ? 'bg-[#FFB6C1] text-white' : 'bg-red-400 text-white'}`}>
+            <Sparkles size={20} className="animate-pulse" />
+            <span className="font-black tracking-tight">{toast.message}</span>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div 
       className="fixed inset-0 bg-[#FFF5F7] text-gray-800 p-2 md:p-4 flex flex-col font-sans overflow-hidden select-none"
@@ -225,6 +294,13 @@ function App() {
                 메모
               </button>
 
+              <button 
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-100 rounded-2xl hover:bg-gray-50 transition-all text-gray-400 font-black shadow-sm active:scale-95"
+              >
+                로그아웃
+              </button>
+
               <div className="flex items-center bg-white border-2 border-[#FFD1DC] rounded-2xl overflow-hidden shadow-sm">
                 <button onClick={prevMonth} className="p-2.5 hover:bg-[#FFF5F7] transition-colors text-[#FF9EAA]">
                   <ChevronLeft size={20} strokeWidth={3} />
@@ -275,7 +351,7 @@ function App() {
                       `}
                     >
                       <div className="flex justify-between items-start mb-1 shrink-0">
-                        <span className={`text-xs font-black w-6 h-6 flex items-center justify-center rounded-full transition-colors
+                        <span className={`text-sm font-black w-7 h-7 flex items-center justify-center rounded-full transition-colors
                           ${isSameDay(day, new Date()) ? 'bg-[#FF9EAA] text-white shadow-md shadow-pink-100' : 
                             dayOfWeek === 0 ? 'text-[#FF8E9E]' : 
                             dayOfWeek === 6 ? 'text-[#A0C4FF]' : 'text-gray-400 group-hover:text-[#FF9EAA]'}
