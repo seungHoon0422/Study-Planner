@@ -18,7 +18,10 @@ const TaskModal: React.FC<TaskModalProps> = ({ date, onClose, onShowToast, editT
   const [startTime, setStartTime] = useState(editTask?.startTime || '18:00');
   const [duration, setDuration] = useState(editTask?.duration || 60);
   const [selectedColor, setSelectedColor] = useState(editTask?.color || '#FEE2E2');
-  const [selectedType, setSelectedType] = useState(editTask?.type || defaultTaskType);
+  const [selectedType, setSelectedType] = useState(() => {
+    if (editTask && taskTypes.includes(editTask.type)) return editTask.type;
+    return taskTypes.includes(defaultTaskType) ? defaultTaskType : (taskTypes[0] || '');
+  });
   const [newTypeName, setNewTypeName] = useState('');
   const [isAddingType, setIsAddingType] = useState(false);
   const [showConfirm, setShowConfirm] = useState<{ active: boolean; message: string; payload: any } | null>(null);
@@ -195,10 +198,11 @@ const TaskModal: React.FC<TaskModalProps> = ({ date, onClose, onShowToast, editT
                 <button
                   type="button"
                   onClick={() => {
-                    onShowToast(`"${selectedType}" 카테고리를 삭제했습니다.`, 'success');
-                    deleteTaskType(selectedType);
-                    const remaining = taskTypes.filter(t => t !== selectedType);
+                    const typeToDelete = selectedType;
+                    deleteTaskType(typeToDelete);
+                    const remaining = taskTypes.filter(t => t !== typeToDelete);
                     setSelectedType(remaining[0] || '');
+                    onShowToast(`"${typeToDelete}" 카테고리를 삭제했습니다.`, 'success');
                   }}
                   className="px-4 bg-white border-2 border-red-50 rounded-2xl text-red-300 hover:text-red-400 hover:border-red-100 transition-colors"
                 >
